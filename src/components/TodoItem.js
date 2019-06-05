@@ -14,7 +14,10 @@ class Todo extends Component {
   };
 
   render() {
-    return <li>{this.props.text}</li>;
+    const style = this.props.completed ? "completed" : null;
+    console.log(style);
+
+    return <li className={style}>{this.props.text}</li>;
   }
 }
 

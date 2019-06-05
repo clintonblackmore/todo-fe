@@ -19,7 +19,7 @@ class TodoList extends Component {
         <h1>{this.props.title}</h1>
         <ul>
           {this.props.todos.map(todo => (
-            <TodoItem {...todo} />
+            <TodoItem {...todo} key={todo._id} />
           ))}
         </ul>
       </div>
