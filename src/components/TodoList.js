@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import TodoItem from "./TodoItem";
 
 class TodoList extends Component {
   static propTypes = {
@@ -8,20 +7,36 @@ class TodoList extends Component {
     todos: PropTypes.arrayOf(
       PropTypes.shape({
         text: PropTypes.string.isRequired,
-        completed: PropTypes.bool
+        completed: PropTypes.bool,
+        _id: PropTypes.string.isRequired
       })
     )
   };
 
+  buttonAction(id) {
+    console.log(id);
+  }
+
+  renderToDoItem({ text, _id, completed, deleteFn }, { deleteTodoItem }) {
+    const style = completed ? "completed" : null;
+
+    return (
+      <li className={style} key={_id}>
+        {text}
+        <button className="delete" onClick={() => deleteTodoItem(_id)}>
+          X
+        </button>
+      </li>
+    );
+  }
+
   render() {
+    const { title, todos, actions } = this.props;
+
     return (
       <div className="todo-list">
-        <h1>{this.props.title}</h1>
-        <ul>
-          {this.props.todos.map(todo => (
-            <TodoItem {...todo} key={todo._id} />
-          ))}
-        </ul>
+        <h1>{title}</h1>
+        <ul>{todos.map(todo => this.renderToDoItem(todo, actions))}</ul>
       </div>
     );
   }

@@ -19,7 +19,15 @@ import "./App.css";
 
 class AppComponent extends Component {
   render() {
-    return <TodoList todos={todos.todos} title="To Do List" />;
+    const { createTodoItem, deleteTodoItem } = this.props;
+
+    return (
+      <TodoList
+        todos={todos.todos}
+        actions={{ createTodoItem, deleteTodoItem }}
+        title="To Do List"
+      />
+    );
   }
 }
 
