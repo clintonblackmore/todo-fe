@@ -18,6 +18,10 @@ import todos from "./data/todos";
 import "./App.css";
 
 class AppComponent extends Component {
+  componentDidMount() {
+    console.log("App has mounted");
+  }
+
   render() {
     const { createTodoItem, deleteTodoItem } = this.props;
 

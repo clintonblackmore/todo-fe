@@ -10,7 +10,6 @@ function todoReducer(state = [], action) {
       console.log(state);
       console.log("----");
       return state;
-      break;
 
     default:
       console.warn(`Do not know how to perform ${action.type} action`);
