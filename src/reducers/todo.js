@@ -23,7 +23,7 @@ function todoReducer(state, action) {
       return { ...state, status: "failed" };
 
     case "FETCH_TODO_LIST_SUCCEEDED":
-      return { ...state, status: "succeeded" };
+      return { ...state, status: "succeeded", todos: action.data.todos };
 
     default:
       console.warn(`Do not know how to perform ${action.type} action`);
