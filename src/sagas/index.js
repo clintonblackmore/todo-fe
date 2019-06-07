@@ -6,7 +6,7 @@ const Api = {
   fetchTodoList: () => fetch(`${baseURL}/todos`).then(res => res.json())
 };
 
-export function* fetchData(action) {
+export function* fetchTodoList(action) {
   try {
     //const data = yield call(Api.fetchTodoList, action.payload.url);
     const data = yield call(Api.fetchTodoList);
@@ -16,8 +16,8 @@ export function* fetchData(action) {
   }
 }
 
-function* watchFetchData() {
-  yield takeLatest("FETCH_TODO_LIST_REQUESTED", fetchData);
+function* watchFetchTodoList() {
+  yield takeLatest("FETCH_TODO_LIST_REQUESTED", fetchTodoList);
 }
 
-export default watchFetchData;
+export default watchFetchTodoList;
