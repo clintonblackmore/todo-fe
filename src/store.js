@@ -1,17 +1,15 @@
-import { createStore, applyMiddleware, combineReducers } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import createSagaMiddleware from "redux-saga";
-import sagaFetcher from "./sagas/sagaFetcher";
+import logger from "redux-logger";
+import rootSaga from "./sagas";
 
 //import { syncHistoryWithStore } from "react-router-redux";
 //import { browserHistory } from "react-router";
 
 // import the root reducer
 import todoReducer from "./reducers/todo";
-
-const rootReducer = combineReducers(
-  sagaFetcher.wrapRootReducer({ todos: todoReducer })
-);
+const rootReducer = todoReducer;
 
 // create an object for the default data
 const defaultState = {
@@ -23,10 +21,10 @@ const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
   rootReducer,
   defaultState,
-  composeWithDevTools(applyMiddleware(sagaMiddleware))
+  composeWithDevTools(applyMiddleware(sagaMiddleware), applyMiddleware(logger))
 );
 
-sagaMiddleware.run(sagaFetcher.createRootSaga());
+sagaMiddleware.run(rootSaga);
 
 //export const history = syncHistoryWithStore(browserHistory, store);
 

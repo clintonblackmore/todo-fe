@@ -12,3 +12,9 @@ export function deleteTodoItem(itemId) {
     itemId
   };
 }
+
+export function fetchTodoList() {
+  return {
+    type: "FETCH_TODO_LIST_REQUESTED"
+  };
+}

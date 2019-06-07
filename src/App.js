@@ -11,23 +11,22 @@ import * as actionCreators from "./actions/actionCreators";
 // Components
 import TodoList from "./components/TodoList";
 
-// Data
-import todos from "./data/todos";
-
 // CSS
 import "./App.css";
 
 class AppComponent extends Component {
   componentDidMount() {
     console.log("App has mounted");
+    this.props.fetchTodoList();
   }
 
   render() {
-    const { createTodoItem, deleteTodoItem } = this.props;
+    const { todos, status, createTodoItem, deleteTodoItem } = this.props;
 
     return (
       <TodoList
-        todos={todos.todos}
+        todos={todos}
+        status={status}
         actions={{ createTodoItem, deleteTodoItem }}
         title="To Do List"
       />
@@ -37,7 +36,8 @@ class AppComponent extends Component {
 
 function mapStateToProps(state) {
   return {
-    todos: state.todos
+    todos: state.todos,
+    status: state.status
   };
 }
 

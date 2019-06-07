@@ -1,7 +1,9 @@
 // Sample data to use before we get the DB connection working
 
 const todos = {
+  status: "unknown",
   todos: [
+    /*
     {
       __v: 0,
       _id: "5cf7dcd9c1cc128c550bf747",
@@ -22,7 +24,7 @@ const todos = {
       completed: true,
       completedAt: null,
       text: "Watch a movie"
-    }
+    } */
   ]
 };
 
