@@ -29,5 +29,13 @@ body {
 
 .completed {
   text-decoration: line-through;
+  /*  color: grey; */
+}
+
+.delete_requested {
   color: grey;
+}
+
+.delete_failed {
+  color: red;
 }

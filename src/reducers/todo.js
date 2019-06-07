@@ -7,14 +7,31 @@ function todoReducer(state, action) {
     case "@@INIT":
       return initialState;
 
-    /*
-    case "DELETE_TODO_ITEM":
-      console.log("----");
-      console.log(action);
-      console.log(state);
-      console.log("----");
-      return state;
-      */
+    case "DELETE_TODO_ITEM_REQUESTED":
+      return {
+        ...state,
+        todos: state.todos.map(todo => {
+          if (todo._id === action.itemId)
+            return { ...todo, deletionState: "requested" };
+          return todo;
+        })
+      };
+
+    case "DELETE_TODO_ITEM_FAILED":
+      return {
+        ...state,
+        todos: state.todos.map(todo => {
+          if (todo._id === action.itemId)
+            return { ...todo, deletionState: "failed" };
+          return todo;
+        })
+      };
+
+    case "DELETE_TODO_ITEM_SUCCEEDED":
+      return {
+        ...state,
+        todos: state.todos.filter(item => item._id !== action.id)
+      };
 
     case "FETCH_TODO_LIST_REQUESTED":
       return { ...state, status: "fetching" };

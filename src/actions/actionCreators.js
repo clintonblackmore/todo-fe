@@ -8,7 +8,7 @@ export function createTodoItem(text) {
 export function deleteTodoItem(itemId) {
   console.log("Delete Todo Item called");
   return {
-    type: "DELETE_TODO_ITEM",
+    type: "DELETE_TODO_ITEM_REQUESTED",
     itemId
   };
 }

@@ -19,15 +19,25 @@ class TodoList extends Component {
     console.log(id);
   }
 
-  renderToDoItem({ text, _id, completed, deleteFn }, { deleteTodoItem }) {
-    const style = completed ? "completed" : null;
+  renderToDoItem(
+    { text, _id, completed, deleteFn, deletionState },
+    { deleteTodoItem }
+  ) {
+    let styles = "";
+    if (completed) styles += " completed ";
+    if (deletionState) styles += ` delete_${deletionState} `;
+
+    let deleteButton = (
+      <button className="delete" onClick={() => deleteTodoItem(_id)}>
+        X
+      </button>
+    );
+    if (deletionState === "requested") deleteButton = null;
 
     return (
-      <li className={style} key={_id}>
+      <li className={styles} key={_id}>
         {text}
-        <button className="delete" onClick={() => deleteTodoItem(_id)}>
-          X
-        </button>
+        {deleteButton}
       </li>
     );
   }
