@@ -1,6 +1,7 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 
-const baseURL = "http://localhost:3000";
+//const baseURL = "http://localhost:3000";
+const baseURL = "https://fast-depths-86514.herokuapp.com";
 
 const Api = {
   fetchTodoList: () => fetch(`${baseURL}/todos`).then(res => res.json()),
