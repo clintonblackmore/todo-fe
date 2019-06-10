@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import loadingImage from "../images/loading.gif";
 
 class TodoList extends Component {
+  todoInput = React.createRef();
+
   static propTypes = {
     title: PropTypes.string.isRequired,
     status: PropTypes.string,
@@ -42,6 +44,25 @@ class TodoList extends Component {
     );
   }
 
+  onSubmitNewTodo = (event, createTodoItem) => {
+    event.preventDefault();
+    const text = this.todoInput.current.value;
+    createTodoItem(text);
+    event.currentTarget.reset();
+  };
+
+  renderCreateToDoForm({ createTodoItem }) {
+    return (
+      <form onSubmit={event => this.onSubmitNewTodo(event, createTodoItem)}>
+        <input
+          type="text"
+          placeholder="don't forget to ..."
+          ref={this.todoInput}
+        />
+      </form>
+    );
+  }
+
   renderStatus(status) {
     switch (status) {
       case "fetching":
@@ -63,6 +84,7 @@ class TodoList extends Component {
         <h1>{title}</h1>
         {this.renderStatus(status)}
         <ul>{todos.map(todo => this.renderToDoItem(todo, actions))}</ul>
+        {this.renderCreateToDoForm(actions)}
       </div>
     );
   }

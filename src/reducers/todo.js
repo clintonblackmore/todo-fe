@@ -30,7 +30,7 @@ function todoReducer(state, action) {
     case "DELETE_TODO_ITEM_SUCCEEDED":
       return {
         ...state,
-        todos: state.todos.filter(item => item._id !== action.id)
+        todos: state.todos.filter(item => item._id !== action.itemId)
       };
 
     case "FETCH_TODO_LIST_REQUESTED":
@@ -41,6 +41,19 @@ function todoReducer(state, action) {
 
     case "FETCH_TODO_LIST_SUCCEEDED":
       return { ...state, status: "succeeded", todos: action.data.todos };
+
+    case "CREATE_TODO_ITEM_REQUESTED":
+      // no change on a request
+      return state;
+
+    case "CREATE_TODO_ITEM_FAILED":
+      // don't know what to do here yet
+      return state;
+
+    //return { ...state, status: "failed" };
+
+    case "CREATE_TODO_ITEM_SUCCEEDED":
+      return { ...state, todos: [...state.todos, action.data] };
 
     default:
       console.warn(`Do not know how to perform ${action.type} action`);

@@ -1,6 +1,6 @@
 export function createTodoItem(text) {
   return {
-    type: "CREATE_TODO_ITEM",
+    type: "CREATE_TODO_ITEM_REQUESTED",
     text
   };
 }
