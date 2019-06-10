@@ -20,8 +20,12 @@ const Api = {
   },
   updateTodoItem: (id, text, completed) => {
     const req = new Request(`${baseURL}/todos/${id}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
       method: "PATCH",
-      body: JSON.stringify(text, completed)
+      body: JSON.stringify({ text, completed })
     });
     return fetch(req).then(res => res.json());
   }
