@@ -1,13 +1,28 @@
 // Data
 import initialState from "../data/todos";
 
+import {
+  DELETE_TODO_ITEM_REQUESTED,
+  DELETE_TODO_ITEM_FAILED,
+  DELETE_TODO_ITEM_SUCCEEDED,
+  FETCH_TODO_LIST_REQUESTED,
+  FETCH_TODO_LIST_FAILED,
+  FETCH_TODO_LIST_SUCCEEDED,
+  CREATE_TODO_ITEM_REQUESTED,
+  CREATE_TODO_ITEM_FAILED,
+  CREATE_TODO_ITEM_SUCCEEDED,
+  UPDATE_TODO_ITEM_REQUESTED,
+  UPDATE_TODO_ITEM_FAILED,
+  UPDATE_TODO_ITEM_SUCCEEDED
+} from "../constants";
+
 function todoReducer(state, action) {
   console.log(`Performing action ${action.type}`);
   switch (action.type) {
     case "@@INIT":
       return initialState;
 
-    case "DELETE_TODO_ITEM_REQUESTED":
+    case DELETE_TODO_ITEM_REQUESTED:
       return {
         ...state,
         todos: state.todos.map(todo => {
@@ -17,7 +32,7 @@ function todoReducer(state, action) {
         })
       };
 
-    case "DELETE_TODO_ITEM_FAILED":
+    case DELETE_TODO_ITEM_FAILED:
       return {
         ...state,
         todos: state.todos.map(todo => {
@@ -27,41 +42,41 @@ function todoReducer(state, action) {
         })
       };
 
-    case "DELETE_TODO_ITEM_SUCCEEDED":
+    case DELETE_TODO_ITEM_SUCCEEDED:
       return {
         ...state,
         todos: state.todos.filter(item => item._id !== action.itemId)
       };
 
-    case "FETCH_TODO_LIST_REQUESTED":
+    case FETCH_TODO_LIST_REQUESTED:
       return { ...state, status: "fetching" };
 
-    case "FETCH_TODO_LIST_FAILED":
+    case FETCH_TODO_LIST_FAILED:
       return { ...state, status: "failed" };
 
-    case "FETCH_TODO_LIST_SUCCEEDED":
+    case FETCH_TODO_LIST_SUCCEEDED:
       return { ...state, status: "succeeded", todos: action.data.todos };
 
-    case "CREATE_TODO_ITEM_REQUESTED":
+    case CREATE_TODO_ITEM_REQUESTED:
       // no change on a request
       return state;
 
-    case "CREATE_TODO_ITEM_FAILED":
+    case CREATE_TODO_ITEM_FAILED:
       // don't know what to do here yet
       return state;
 
     //return { ...state, status: "failed" };
 
-    case "CREATE_TODO_ITEM_SUCCEEDED":
+    case CREATE_TODO_ITEM_SUCCEEDED:
       return { ...state, todos: [...state.todos, action.data] };
 
-    case "UPDATE_TODO_ITEM_REQUESTED":
+    case UPDATE_TODO_ITEM_REQUESTED:
       return state; // no change
 
-    case "UPDATE_TODO_ITEM_FAILED":
+    case UPDATE_TODO_ITEM_FAILED:
       return state; // fail silently (!)
 
-    case "UPDATE_TODO_ITEM_SUCCEEDED":
+    case UPDATE_TODO_ITEM_SUCCEEDED:
       return {
         ...state,
         todos: state.todos.map(todo => {
