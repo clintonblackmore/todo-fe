@@ -6,7 +6,6 @@ export function createTodoItem(text) {
 }
 
 export function deleteTodoItem(itemId) {
-  console.log("Delete Todo Item called");
   return {
     type: "DELETE_TODO_ITEM_REQUESTED",
     itemId
@@ -16,5 +15,14 @@ export function deleteTodoItem(itemId) {
 export function fetchTodoList() {
   return {
     type: "FETCH_TODO_LIST_REQUESTED"
+  };
+}
+
+export function updateTodoItem(id, text, completed) {
+  return {
+    type: "UPDATE_TODO_ITEM_REQUESTED",
+    id,
+    text,
+    completed
   };
 }

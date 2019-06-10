@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import loadingImage from "../images/loading.gif";
+import ContentEditable from "react-contenteditable";
 
 class TodoList extends Component {
   todoInput = React.createRef();
@@ -17,13 +18,9 @@ class TodoList extends Component {
     )
   };
 
-  buttonAction(id) {
-    console.log(id);
-  }
-
   renderToDoItem(
-    { text, _id, completed, deleteFn, deletionState },
-    { deleteTodoItem }
+    { text, _id, completed, deletionState },
+    { deleteTodoItem, updateTodoItem }
   ) {
     let styles = "";
     if (completed) styles += " completed ";
@@ -36,9 +33,17 @@ class TodoList extends Component {
     );
     if (deletionState === "requested") deleteButton = null;
 
+    const ref = React.createRef();
+
     return (
       <li className={styles} key={_id}>
-        {text}
+        <ContentEditable
+          html={text}
+          ref={ref}
+          //onChange={this.handleChange}
+          onBlur={event => this.handleBlur(event, _id, updateTodoItem)}
+          onKeyDown={event => this.handleKeyDown(event, _id, updateTodoItem)}
+        />
         {deleteButton}
       </li>
     );
@@ -49,6 +54,30 @@ class TodoList extends Component {
     const text = this.todoInput.current.value;
     createTodoItem(text);
     event.currentTarget.reset();
+  };
+
+  handleBlur = (event, id, updateTodoItem) => {
+    console.log("blur");
+    this.doUpdateText(event, id, updateTodoItem);
+  };
+
+  handleKeyDown = (event, id, updateTodoItem) => {
+    const keyCode = event.keyCode || event.which;
+
+    // If the enter key is pressed, prevent newlines and instead update the text
+    if (keyCode === 13) {
+      console.log("ret");
+      event.returnValue = false;
+      if (event.preventDefault) event.preventDefault();
+      this.doUpdateText(event, id, updateTodoItem);
+    }
+  };
+
+  doUpdateText = (event, id, updateTodoItem) => {
+    console.log("DO UPDATE");
+    const text = event.target.innerText;
+    const completed = false;
+    updateTodoItem(id, text, completed);
   };
 
   renderCreateToDoForm({ createTodoItem }) {

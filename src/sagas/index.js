@@ -16,7 +16,13 @@ const Api = {
       method: "POST",
       body: JSON.stringify({ text })
     });
-    console.log(req);
+    return fetch(req).then(res => res.json());
+  },
+  updateTodoItem: (id, text, completed) => {
+    const req = new Request(`${baseURL}/todos/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(text, completed)
+    });
     return fetch(req).then(res => res.json());
   }
 };
@@ -43,15 +49,29 @@ export function* deleteTodoItem(action) {
 export function* createTodoItem(action) {
   try {
     const data = yield call(Api.createTodoItem, action.text);
-    console.log(data);
+    //console.log(data);
     yield put({ type: "CREATE_TODO_ITEM_SUCCEEDED", data });
   } catch (error) {
     yield put({ type: "CREATE_TODO_ITEM_FAILED", text: action.text });
   }
 }
 
+export function* updateTodoItem(action) {
+  try {
+    const { id, text, completed } = action;
+    const data = yield call(Api.updateTodoItem, id, text, completed);
+    console.log({ updating: { action, data } });
+    //console.log(action);
+    //c//onsole.log(data);
+    yield put({ ...action, type: "UPDATE_TODO_ITEM_SUCCEEDED" });
+  } catch (error) {
+    yield put({ ...action, type: "UPDATE_TODO_ITEM_FAILED" });
+  }
+}
+
 export default function* watchWebRequests() {
   yield takeLatest("FETCH_TODO_LIST_REQUESTED", fetchTodoList);
-  yield takeLatest("DELETE_TODO_ITEM_REQUESTED", deleteTodoItem);
+  yield takeEvery("DELETE_TODO_ITEM_REQUESTED", deleteTodoItem);
   yield takeEvery("CREATE_TODO_ITEM_REQUESTED", createTodoItem);
+  yield takeEvery("UPDATE_TODO_ITEM_REQUESTED", updateTodoItem);
 }

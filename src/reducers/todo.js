@@ -55,6 +55,22 @@ function todoReducer(state, action) {
     case "CREATE_TODO_ITEM_SUCCEEDED":
       return { ...state, todos: [...state.todos, action.data] };
 
+    case "UPDATE_TODO_ITEM_REQUESTED":
+      return state; // no change
+
+    case "UPDATE_TODO_ITEM_FAILED":
+      return state; // fail silently (!)
+
+    case "UPDATE_TODO_ITEM_SUCCEEDED":
+      return {
+        ...state,
+        todos: state.todos.map(todo => {
+          if (todo._id === action.id)
+            return { ...todo, text: action.text, completed: action.completed };
+          return todo;
+        })
+      };
+
     default:
       console.warn(`Do not know how to perform ${action.type} action`);
       return state;

@@ -21,13 +21,19 @@ class AppComponent extends Component {
   }
 
   render() {
-    const { todos, status, createTodoItem, deleteTodoItem } = this.props;
+    const {
+      todos,
+      status,
+      createTodoItem,
+      deleteTodoItem,
+      updateTodoItem
+    } = this.props;
 
     return (
       <TodoList
         todos={todos}
         status={status}
-        actions={{ createTodoItem, deleteTodoItem }}
+        actions={{ createTodoItem, deleteTodoItem, updateTodoItem }}
         title="To Do List"
       />
     );
