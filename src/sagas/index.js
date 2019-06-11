@@ -1,5 +1,20 @@
 import { call, put, takeLatest, takeEvery } from "redux-saga/effects";
 
+import {
+  DELETE_TODO_ITEM_REQUESTED,
+  DELETE_TODO_ITEM_FAILED,
+  DELETE_TODO_ITEM_SUCCEEDED,
+  FETCH_TODO_LIST_REQUESTED,
+  FETCH_TODO_LIST_FAILED,
+  FETCH_TODO_LIST_SUCCEEDED,
+  CREATE_TODO_ITEM_REQUESTED,
+  CREATE_TODO_ITEM_FAILED,
+  CREATE_TODO_ITEM_SUCCEEDED,
+  UPDATE_TODO_ITEM_REQUESTED,
+  UPDATE_TODO_ITEM_FAILED,
+  UPDATE_TODO_ITEM_SUCCEEDED
+} from "../constants";
+
 const baseURL = "http://localhost:3000";
 //const baseURL = "https://fast-depths-86514.herokuapp.com";
 
@@ -35,18 +50,18 @@ export function* fetchTodoList(action) {
   try {
     //const data = yield call(Api.fetchTodoList, action.payload.url);
     const data = yield call(Api.fetchTodoList);
-    yield put({ type: "FETCH_TODO_LIST_SUCCEEDED", data });
+    yield put({ type: FETCH_TODO_LIST_SUCCEEDED, data });
   } catch (error) {
-    yield put({ type: "FETCH_TODO_LIST_FAILED", error });
+    yield put({ type: FETCH_TODO_LIST_FAILED, error });
   }
 }
 
 export function* deleteTodoItem(action) {
   try {
     yield call(Api.deleteTodoItem, action.itemId);
-    yield put({ type: "DELETE_TODO_ITEM_SUCCEEDED", itemId: action.itemId });
+    yield put({ type: DELETE_TODO_ITEM_SUCCEEDED, itemId: action.itemId });
   } catch (error) {
-    yield put({ type: "DELETE_TODO_ITEM_FAILED", itemId: action.itemId });
+    yield put({ type: DELETE_TODO_ITEM_FAILED, itemId: action.itemId });
   }
 }
 
@@ -54,9 +69,9 @@ export function* createTodoItem(action) {
   try {
     const data = yield call(Api.createTodoItem, action.text);
     //console.log(data);
-    yield put({ type: "CREATE_TODO_ITEM_SUCCEEDED", data });
+    yield put({ type: CREATE_TODO_ITEM_SUCCEEDED, data });
   } catch (error) {
-    yield put({ type: "CREATE_TODO_ITEM_FAILED", text: action.text });
+    yield put({ type: CREATE_TODO_ITEM_FAILED, text: action.text });
   }
 }
 
@@ -67,15 +82,15 @@ export function* updateTodoItem(action) {
     console.log({ updating: { action, data } });
     //console.log(action);
     //c//onsole.log(data);
-    yield put({ ...action, type: "UPDATE_TODO_ITEM_SUCCEEDED" });
+    yield put({ ...action, type: UPDATE_TODO_ITEM_SUCCEEDED });
   } catch (error) {
-    yield put({ ...action, type: "UPDATE_TODO_ITEM_FAILED" });
+    yield put({ ...action, type: UPDATE_TODO_ITEM_FAILED });
   }
 }
 
 export default function* watchWebRequests() {
-  yield takeLatest("FETCH_TODO_LIST_REQUESTED", fetchTodoList);
-  yield takeEvery("DELETE_TODO_ITEM_REQUESTED", deleteTodoItem);
-  yield takeEvery("CREATE_TODO_ITEM_REQUESTED", createTodoItem);
-  yield takeEvery("UPDATE_TODO_ITEM_REQUESTED", updateTodoItem);
+  yield takeLatest(FETCH_TODO_LIST_REQUESTED, fetchTodoList);
+  yield takeEvery(DELETE_TODO_ITEM_REQUESTED, deleteTodoItem);
+  yield takeEvery(CREATE_TODO_ITEM_REQUESTED, createTodoItem);
+  yield takeEvery(UPDATE_TODO_ITEM_REQUESTED, updateTodoItem);
 }
