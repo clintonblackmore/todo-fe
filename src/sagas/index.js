@@ -2,18 +2,12 @@ import { call, put, takeLatest, takeEvery } from "redux-saga/effects";
 
 import {
   DELETE_TODO_ITEM_REQUESTED,
-  DELETE_TODO_ITEM_FAILED,
-  DELETE_TODO_ITEM_SUCCEEDED,
   FETCH_TODO_LIST_REQUESTED,
-  FETCH_TODO_LIST_FAILED,
-  FETCH_TODO_LIST_SUCCEEDED,
   CREATE_TODO_ITEM_REQUESTED,
-  CREATE_TODO_ITEM_FAILED,
-  CREATE_TODO_ITEM_SUCCEEDED,
-  UPDATE_TODO_ITEM_REQUESTED,
-  UPDATE_TODO_ITEM_FAILED,
-  UPDATE_TODO_ITEM_SUCCEEDED
+  UPDATE_TODO_ITEM_REQUESTED
 } from "../constants";
+
+import * as actions from "../actions/actionCreators";
 
 const baseURL = "http://localhost:3000";
 //const baseURL = "https://fast-depths-86514.herokuapp.com";
@@ -23,6 +17,7 @@ const Api = {
   deleteTodoItem: id =>
     fetch(new Request(`${baseURL}/todos/${id}`, { method: "DELETE" })),
   createTodoItem: text => {
+    console.log(text);
     const req = new Request(`${baseURL}/todos`, {
       headers: {
         Accept: "application/json",
@@ -33,7 +28,7 @@ const Api = {
     });
     return fetch(req).then(res => res.json());
   },
-  updateTodoItem: (id, text, completed) => {
+  updateTodoItem: ({ payload: { id, text, completed } }) => {
     const req = new Request(`${baseURL}/todos/${id}`, {
       headers: {
         Accept: "application/json",
@@ -50,41 +45,40 @@ export function* fetchTodoList(action) {
   try {
     //const data = yield call(Api.fetchTodoList, action.payload.url);
     const data = yield call(Api.fetchTodoList);
-    yield put({ type: FETCH_TODO_LIST_SUCCEEDED, data });
+    yield put(actions.fetchTodoListSucceeded(data));
   } catch (error) {
-    yield put({ type: FETCH_TODO_LIST_FAILED, error });
-  }
-}
-
-export function* deleteTodoItem(action) {
-  try {
-    yield call(Api.deleteTodoItem, action.itemId);
-    yield put({ type: DELETE_TODO_ITEM_SUCCEEDED, itemId: action.itemId });
-  } catch (error) {
-    yield put({ type: DELETE_TODO_ITEM_FAILED, itemId: action.itemId });
+    yield put(actions.fetchTodoListFailed(error));
   }
 }
 
 export function* createTodoItem(action) {
   try {
-    const data = yield call(Api.createTodoItem, action.text);
-    //console.log(data);
-    yield put({ type: CREATE_TODO_ITEM_SUCCEEDED, data });
+    console.log(action);
+    const data = yield call(Api.createTodoItem, action.payload.text);
+    console.log(data);
+    yield put(actions.createTodoItemSucceeded(data));
   } catch (error) {
-    yield put({ type: CREATE_TODO_ITEM_FAILED, text: action.text });
+    yield put(actions.createTodoItemFailed({ error, text: action.text }));
   }
 }
 
 export function* updateTodoItem(action) {
   try {
-    const { id, text, completed } = action;
-    const data = yield call(Api.updateTodoItem, id, text, completed);
-    console.log({ updating: { action, data } });
-    //console.log(action);
-    //c//onsole.log(data);
-    yield put({ ...action, type: UPDATE_TODO_ITEM_SUCCEEDED });
+    console.log(action);
+    const data = yield call(Api.updateTodoItem, action.payload);
+    yield put(actions.updateTodoItemSucceeded({ ...action, data }));
   } catch (error) {
-    yield put({ ...action, type: UPDATE_TODO_ITEM_FAILED });
+    yield put(actions.updateTodoItemFailed(action));
+  }
+}
+
+export function* deleteTodoItem(action) {
+  try {
+    yield call(Api.deleteTodoItem, action.payload.itemId);
+    console.log("The action is %o", action);
+    yield put(actions.deleteTodoItemSucceeded(action.payload.itemId));
+  } catch (error) {
+    yield put(actions.deleteTodoItemFailed(action.payload.itemId));
   }
 }
 

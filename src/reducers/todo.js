@@ -16,37 +16,11 @@ import {
   UPDATE_TODO_ITEM_SUCCEEDED
 } from "../constants";
 
-function todoReducer(state, action) {
-  console.log(`Performing action ${action.type}`);
-  switch (action.type) {
+function todoReducer(state, { type, payload }) {
+  console.log(`Performing action ${type}`);
+  switch (type) {
     case "@@INIT":
       return initialState;
-
-    case DELETE_TODO_ITEM_REQUESTED:
-      return {
-        ...state,
-        todos: state.todos.map(todo => {
-          if (todo._id === action.itemId)
-            return { ...todo, deletionState: "requested" };
-          return todo;
-        })
-      };
-
-    case DELETE_TODO_ITEM_FAILED:
-      return {
-        ...state,
-        todos: state.todos.map(todo => {
-          if (todo._id === action.itemId)
-            return { ...todo, deletionState: "failed" };
-          return todo;
-        })
-      };
-
-    case DELETE_TODO_ITEM_SUCCEEDED:
-      return {
-        ...state,
-        todos: state.todos.filter(item => item._id !== action.itemId)
-      };
 
     case FETCH_TODO_LIST_REQUESTED:
       return { ...state, status: "fetching" };
@@ -55,7 +29,7 @@ function todoReducer(state, action) {
       return { ...state, status: "failed" };
 
     case FETCH_TODO_LIST_SUCCEEDED:
-      return { ...state, status: "succeeded", todos: action.data.todos };
+      return { ...state, status: "succeeded", todos: payload.data.todos };
 
     case CREATE_TODO_ITEM_REQUESTED:
       // no change on a request
@@ -65,10 +39,8 @@ function todoReducer(state, action) {
       // don't know what to do here yet
       return state;
 
-    //return { ...state, status: "failed" };
-
     case CREATE_TODO_ITEM_SUCCEEDED:
-      return { ...state, todos: [...state.todos, action.data] };
+      return { ...state, todos: [...state.todos, payload.data] };
 
     case UPDATE_TODO_ITEM_REQUESTED:
       return state; // no change
@@ -80,14 +52,44 @@ function todoReducer(state, action) {
       return {
         ...state,
         todos: state.todos.map(todo => {
-          if (todo._id === action.id)
-            return { ...todo, text: action.text, completed: action.completed };
+          if (todo._id === payload.id)
+            return {
+              ...todo,
+              text: payload.text,
+              completed: payload.completed
+            };
           return todo;
         })
       };
 
+    case DELETE_TODO_ITEM_REQUESTED:
+      return {
+        ...state,
+        todos: state.todos.map(todo => {
+          if (todo._id === payload.itemId)
+            return { ...todo, deletionState: "requested" };
+          return todo;
+        })
+      };
+
+    case DELETE_TODO_ITEM_FAILED:
+      return {
+        ...state,
+        todos: state.todos.map(todo => {
+          if (todo._id === payload.itemId)
+            return { ...todo, deletionState: "failed" };
+          return todo;
+        })
+      };
+
+    case DELETE_TODO_ITEM_SUCCEEDED:
+      return {
+        ...state,
+        todos: state.todos.filter(item => item._id !== payload.itemId)
+      };
+
     default:
-      console.warn(`Do not know how to perform ${action.type} action`);
+      console.warn(`Do not know how to perform ${type} action`);
       return state;
   }
 }

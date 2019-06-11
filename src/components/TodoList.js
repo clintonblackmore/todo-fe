@@ -77,7 +77,7 @@ class TodoList extends Component {
     console.log("DO UPDATE");
     const text = event.target.innerText;
     const completed = false;
-    updateTodoItem(id, text, completed);
+    updateTodoItem({ id, text, completed });
   };
 
   renderCreateToDoForm({ createTodoItem }) {
