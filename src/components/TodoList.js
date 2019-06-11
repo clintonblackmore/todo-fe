@@ -33,10 +33,21 @@ class TodoList extends Component {
     );
     if (deletionState === "requested") deleteButton = null;
 
+    let markCompleteButton = (
+      <button
+        className="mark_complete"
+        onClick={() => updateTodoItem({ id: _id, text, completed: !completed })}
+      >
+        ✓
+      </button>
+    );
+
     const ref = React.createRef();
 
     return (
       <li className={styles} key={_id}>
+        {markCompleteButton}
+
         <ContentEditable
           html={text}
           ref={ref}

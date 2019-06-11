@@ -52,11 +52,9 @@ function todoReducer(state, { type, payload }) {
       return {
         ...state,
         todos: state.todos.map(todo => {
-          if (todo._id === payload.id)
+          if (todo._id === payload.todo._id)
             return {
-              ...todo,
-              text: payload.text,
-              completed: payload.completed
+              ...payload.todo
             };
           return todo;
         })

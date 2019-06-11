@@ -28,7 +28,7 @@ const Api = {
     });
     return fetch(req).then(res => res.json());
   },
-  updateTodoItem: ({ payload: { id, text, completed } }) => {
+  updateTodoItem: ({ id, text, completed }) => {
     const req = new Request(`${baseURL}/todos/${id}`, {
       headers: {
         Accept: "application/json",
@@ -64,11 +64,12 @@ export function* createTodoItem(action) {
 
 export function* updateTodoItem(action) {
   try {
-    console.log(action);
+    console.log("%c updateTodoItem %o", "color: blue", action.payload);
     const data = yield call(Api.updateTodoItem, action.payload);
-    yield put(actions.updateTodoItemSucceeded({ ...action, data }));
+    console.log("%c returned %o", "color: blue", data);
+    yield put(actions.updateTodoItemSucceeded(data));
   } catch (error) {
-    yield put(actions.updateTodoItemFailed(action));
+    yield put(actions.updateTodoItemFailed(action.payload));
   }
 }
 
