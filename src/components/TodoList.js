@@ -22,12 +22,12 @@ class TodoList extends Component {
     { text, _id, completed, deletionState },
     { deleteTodoItem, updateTodoItem }
   ) {
-    let styles = "";
+    let styles = "inline ";
     if (completed) styles += " completed ";
     if (deletionState) styles += ` delete_${deletionState} `;
 
     let deleteButton = (
-      <button className="delete" onClick={() => deleteTodoItem(_id)}>
+      <button className="delete inline" onClick={() => deleteTodoItem(_id)}>
         X
       </button>
     );
@@ -35,7 +35,7 @@ class TodoList extends Component {
 
     let markCompleteButton = (
       <button
-        className="mark_complete"
+        className="mark_complete inline"
         onClick={() => updateTodoItem({ id: _id, text, completed: !completed })}
       >
         ✓
@@ -45,10 +45,11 @@ class TodoList extends Component {
     const ref = React.createRef();
 
     return (
-      <li className={styles} key={_id}>
+      <li key={_id}>
         {markCompleteButton}
 
         <ContentEditable
+          className={styles}
           html={text}
           ref={ref}
           //onChange={this.handleChange}

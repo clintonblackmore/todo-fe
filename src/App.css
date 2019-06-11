@@ -8,7 +8,7 @@ body {
 
 .todo-list {
   margin: auto;
-  width: 12em;
+  width: 30em;
   border: thick solid white;
   padding: 0;
   background: linen;
@@ -38,4 +38,8 @@ body {
 
 .delete_failed {
   color: red;
+}
+
+.inline {
+  display: inline-block;
 }
