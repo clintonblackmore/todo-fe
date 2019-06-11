@@ -52,8 +52,12 @@ class TodoList extends Component {
           html={text}
           ref={ref}
           //onChange={this.handleChange}
-          onBlur={event => this.handleBlur(event, _id, updateTodoItem)}
-          onKeyDown={event => this.handleKeyDown(event, _id, updateTodoItem)}
+          onBlur={event =>
+            this.handleBlur({ event, id: _id, updateTodoItem, completed })
+          }
+          onKeyDown={event =>
+            this.handleKeyDown({ event, id: _id, updateTodoItem, completed })
+          }
         />
         {deleteButton}
       </li>
@@ -67,12 +71,12 @@ class TodoList extends Component {
     event.currentTarget.reset();
   };
 
-  handleBlur = (event, id, updateTodoItem) => {
-    console.log("blur");
-    this.doUpdateText(event, id, updateTodoItem);
+  handleBlur = params => {
+    this.doUpdateText(params);
   };
 
-  handleKeyDown = (event, id, updateTodoItem) => {
+  handleKeyDown = params => {
+    const { event } = params;
     const keyCode = event.keyCode || event.which;
 
     // If the enter key is pressed, prevent newlines and instead update the text
@@ -80,14 +84,12 @@ class TodoList extends Component {
       console.log("ret");
       event.returnValue = false;
       if (event.preventDefault) event.preventDefault();
-      this.doUpdateText(event, id, updateTodoItem);
+      this.doUpdateText(params);
     }
   };
 
-  doUpdateText = (event, id, updateTodoItem) => {
-    console.log("DO UPDATE");
+  doUpdateText = ({ event, id, updateTodoItem, completed }) => {
     const text = event.target.innerText;
-    const completed = false;
     updateTodoItem({ id, text, completed });
   };
 
